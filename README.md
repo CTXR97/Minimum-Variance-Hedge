@@ -12,6 +12,8 @@ We can use beta, the correlation coefficient, instead of the equation above if t
 
 <img width="254" alt="Screenshot 2022-07-11 at 12 06 03 AM" src="https://user-images.githubusercontent.com/107907500/178152600-1db8299f-d1a9-4c08-93dd-c29e864890f1.png">
 
+<img width="613" alt="Screenshot 2022-07-11 at 12 17 10 AM" src="https://user-images.githubusercontent.com/107907500/178152995-9d46d02a-93e7-4829-b3a7-6bf48f0c3d59.png">
+
 Once we have found the optimal hedge ratio, we can find the number of futures contracts to purchase.
 
 <img width="476" alt="Screenshot 2022-07-11 at 12 06 22 AM" src="https://user-images.githubusercontent.com/107907500/178152611-3f037d2e-33db-4eb9-b8a6-44b501097e55.png">
@@ -23,6 +25,4 @@ In Python Code (To-do):
 4. Formulate the hedge ratio
 5. Based on the hedge ratio, define a function to allow user to input notional amount and price of futures to get hedge units
 
-
-<img width="585" alt="Screenshot 2022-07-11 at 12 16 02 AM" src="https://user-images.githubusercontent.com/107907500/178152940-3c996cc6-cc5a-4ef2-8e19-cba1f2913d72.png">
 
