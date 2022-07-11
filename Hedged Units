@@ -1,0 +1,26 @@
+import statistics
+import csv
+import pandas as pd
+import math
+
+To_Purchase = int(input())
+Per_contract = int(input())
+
+HSI_Fut = pd.read_csv('Hang Seng Futures Historical Data.csv')
+HSI_Fut = HSI_Fut.filter(['Date','Price'])
+HSI_Fut["Price"] = [float(str(i).replace(",", "")) for i in HSI_Fut["Price"]]
+HSI_Fut['Price_change'] = HSI_Fut['Price'].pct_change()
+
+CSI_Spot = pd.read_csv('Shanghai Shenzhen CSI 300 Historical Data.csv')
+CSI_Spot = CSI_Spot.filter(['Date','Price'])
+CSI_Spot["Price"] = [float(str(i).replace(",", "")) for i in CSI_Spot["Price"]]
+CSI_Spot['Price_change'] = CSI_Spot['Price'].pct_change()
+
+CSI_std = CSI_Spot['Price_change'].std()
+HSI_std = HSI_Fut['Price_change'].std()
+Correlation = HSI_Fut['Price_change'].corr(CSI_Spot['Price_change'])
+
+Hedge_Ratio = Correlation * (CSI_std/HSI_std) #Ratio of spot to futures
+Hedge_Units = Hedge_Ratio * (To_Purchase/Per_contract) #How many gallons to purchase against the value of the contract
+
+print(Hedge_Units)
