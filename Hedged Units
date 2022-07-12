@@ -23,6 +23,9 @@ HSI_std = HSI_Fut['Price_change'].std()
 Correlation = HSI_Fut['Price_change'].corr(CSI_Spot['Price_change'])
 
 Hedge_Ratio = Correlation * (CSI_std/HSI_std) #Ratio of spot to futures
+Risk_Reduction = sqrt(1-Hedge_Ratio**2)
 Hedge_Units = Hedge_Ratio * (No_of_contracts/Value_per_contract)
 
-print(f"Hedge Ratio is at {Hedge_Ratio}. Optimal number of futures contact to purchase is at {Hedge_Units}")
+print(f"Hedge Ratio is at {Hedge_Ratio}.\n
+      The minimum variance hedge will reduce the risk by a factor of {Risk_Reduction}.\n
+      Optimal number of futures contact to purchase is at {Hedge_Units}")
