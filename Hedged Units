@@ -3,7 +3,9 @@ import csv
 import pandas as pd
 import math
 
+print("Please input size of position being hedged")
 No_of_contracts = int(input())
+print("Please input size of one futures contract")
 Value_per_contract = int(input())
 
 HSI_Fut = pd.read_csv('Hang Seng Futures Historical Data.csv')
@@ -23,4 +25,4 @@ Correlation = HSI_Fut['Price_change'].corr(CSI_Spot['Price_change'])
 Hedge_Ratio = Correlation * (CSI_std/HSI_std) #Ratio of spot to futures
 Hedge_Units = Hedge_Ratio * (No_of_contracts/Value_per_contract) #How many gallons to purchase against the value of the contract
 
-print(Hedge_Units)
+print(f"Hedge Ratio is at {Hedge_Ratio}. Optimal number of futures contact to purchase is at {Hedge_Units}")
