@@ -23,7 +23,7 @@ HSI_std = HSI_Fut['Price_change'].std()
 Correlation = HSI_Fut['Price_change'].corr(CSI_Spot['Price_change'])
 
 Hedge_Ratio = Correlation * (CSI_std/HSI_std) #Ratio of spot to futures
-Risk_Reduction = sqrt(1-Hedge_Ratio**2)
+Risk_Reduction = math.sqrt(1-Hedge_Ratio**2)
 Hedge_Units = Hedge_Ratio * (No_of_contracts/Value_per_contract)
 
 print(f"Hedge Ratio is at {Hedge_Ratio}.\n
