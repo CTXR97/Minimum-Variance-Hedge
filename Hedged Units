@@ -1,31 +1,121 @@
 import statistics
+import matplotlib.pyplot as plt
 import csv
 import pandas as pd
 import math
+from sklearn.linear_model import LinearRegression
+import numpy as np
 
 print("Please input size of position being hedged")
-No_of_contracts = int(input())
+No_of_contracts = 1000000 #int(input())
 print("Please input size of one futures contract")
-Value_per_contract = int(input())
+Value_per_contract = 12  #int(input())
 
-HSI_Fut = pd.read_csv('Hang Seng Futures Historical Data.csv')
-HSI_Fut = HSI_Fut.filter(['Date','Price'])
-HSI_Fut["Price"] = [float(str(i).replace(",", "")) for i in HSI_Fut["Price"]]
-HSI_Fut['Price_change'] = HSI_Fut['Price'].pct_change()
+# Read the different contracts
 
-CSI_Spot = pd.read_csv('Shanghai Shenzhen CSI 300 Historical Data.csv')
-CSI_Spot = CSI_Spot.filter(['Date','Price'])
-CSI_Spot["Price"] = [float(str(i).replace(",", "")) for i in CSI_Spot["Price"]]
-CSI_Spot['Price_change'] = CSI_Spot['Price'].pct_change()
+SPOT = pd.read_excel('CO1.xlsx', skiprows=7)
+SPOT = SPOT.loc[0:80,:]
 
-CSI_std = CSI_Spot['Price_change'].std()
-HSI_std = HSI_Fut['Price_change'].std()
-Correlation = HSI_Fut['Price_change'].corr(CSI_Spot['Price_change'])
+FUT1 = pd.read_excel('TTF.xlsx', skiprows=7)
+FUT1 = FUT1.loc[0:80,:]
 
-Hedge_Ratio = Correlation * (CSI_std/HSI_std) #Ratio of spot to futures
-Risk_Reduction = math.sqrt(1-Hedge_Ratio**2)
-Hedge_Units = Hedge_Ratio * (No_of_contracts/Value_per_contract)
+# Calculate the percentage change
 
-print(f"Hedge Ratio is at {Hedge_Ratio}.\n
-      The minimum variance hedge will reduce the risk by a factor of {Risk_Reduction}.\n
-      Optimal number of futures contact to purchase is at {Hedge_Units}")
+SPOT['Price_change'] = SPOT['PX_LAST'].pct_change()
+FUT1['Price_change'] = FUT1['PX_LAST'].pct_change()
+
+# Calculate Stdev
+
+SPOT_std = SPOT['Price_change'].std()
+FUT1_std = FUT1['Price_change'].std()
+
+# Calculate Variance
+
+SPOT_var = SPOT['Price_change'].var()
+FUT1_var = FUT1['Price_change'].var()
+
+# Calculate Correlation
+
+Correlation_FUT1 = SPOT['Price_change'].corr(FUT1['Price_change'])
+
+# Calculate Hedge Ratio
+
+Hedge_Ratio_FUT1 = Correlation_FUT1 * (SPOT_std / FUT1_std)
+
+# Calculate Risk_Reduction
+
+Risk_Reduction_FUT1 = math.sqrt(1 - Hedge_Ratio_FUT1 ** 2)
+
+# Calculate Optimal contracts
+
+Hedge_Units_FUT1 = Hedge_Ratio_FUT1 * (No_of_contracts / Value_per_contract)
+
+# Calculate Basis Risk
+
+Basis_Risk_FUT1 = SPOT_var + (Hedge_Ratio_FUT1 * FUT1_var) - (2 * Correlation_FUT1 * SPOT_std * (Hedge_Ratio_FUT1 * FUT1_std))
+
+# Summary table
+
+Contracts = ['AUG22']
+Hedge_Ratio = [Hedge_Ratio_FUT1]
+Risk_Reduction = [Risk_Reduction_FUT1]
+Hedge_units = [Hedge_Units_FUT1]
+Basis_risk = [Basis_Risk_FUT1]
+
+Summary = pd.DataFrame()
+Summary['Contracts'] = Contracts
+Summary['Basis_risk'] = Basis_risk
+Summary['Hedge_Ratio'] = Hedge_Ratio
+Summary['Risk_Reduction'] = Risk_Reduction
+Summary['Hedge_units'] = Hedge_units
+
+print(Summary)
+
+# Find regression of the different contracts against the SPOT
+
+SPOT.drop(index=SPOT.index[0],axis=0,inplace=True)
+FUT1.drop(index=FUT1.index[0],axis=0,inplace=True)
+
+x = np.array(SPOT['Price_change']).reshape(-1, 1)
+y = np.array(FUT1['Price_change']).reshape(-1, 1)
+model = LinearRegression().fit(x,y)
+
+predict_y = model.predict(x)
+
+#构造返回对象
+predictions = {}
+predictions['intercept'] = model.intercept_ #截距 predictions['coefficient'] = model_1.coef_ #斜率(回归系数) predictions['predict_value'] = predict_y
+
+#绘图
+#绘出已知数据散点图 plt.scatter(x1, y, color = 'blue')
+#绘制预测直线
+#plt.plot(x, predict_y, color = 'red', linewidth = 3)
+#plt.title('predict FUT by SPOT')
+#plt.xlabel('SPOT')
+#plt.ylabel('FUT')
+#plt.show()
+
+#### 统计量参数
+def get_model_stats(x, y, model):
+    message0 = f'Single Linear Regression: \ty = {model.intercept_[0]:.3f} + {model.coef_[0][0]:.3f}*x1'
+
+    from scipy import stats
+
+    n = len(x)
+    y_prd = model.predict(x)
+    Regression = sum((y_prd - np.mean(y))**2) # 回归
+    Residual = sum((y - y_prd)**2) # 残差
+    R_square = Regression / (Regression + Residual) # 相关性系数R^2
+    F = (Regression / 1) / (Residual / ( n - 2 )) # F 分布
+    pf = stats.f.sf(F, 1, n- 2)
+    message1 =(f'相关系数(R^2): {R_square[0]:.3f};\n' + f'回归分析(SSR): {Regression[0]:.3f};\t 残差(SSE):{Residual[0]:.3f};\n' + f' F : {F[0]:.3f};\t pf : {pf[0]}')
+
+    ## T分布
+    L_xx = n
+    sigma = np.sqrt(Residual / (n- 2))
+    t = model.coef_ * np.sqrt(L_xx) / sigma
+    pt = stats.t.sf(t, n- 2)
+    message2 = f' t : {t[0][0]:.3f}; pt : {pt[0][0]}'
+    return print(message0 +'\n' +message1 + '\n'+message2)
+
+get_model_stats(x, y, model)
