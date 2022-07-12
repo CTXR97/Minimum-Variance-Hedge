@@ -14,10 +14,10 @@ Value_per_contract = 12  #int(input())
 # Read the different contracts
 
 SPOT = pd.read_excel('CO1.xlsx', skiprows=7)
-SPOT = SPOT.loc[0:80,:]
+SPOT = SPOT.loc[1:80,:]
 
 FUT1 = pd.read_excel('TTF.xlsx', skiprows=7)
-FUT1 = FUT1.loc[0:80,:]
+FUT1 = FUT1.loc[1:80,:]
 
 # Calculate the percentage change
 
@@ -71,7 +71,9 @@ Summary['Hedge_units'] = Hedge_units
 
 print(Summary)
 
-# Find regression of the different contracts against the SPOT
+
+
+# Find regression of the different contracts against the SPOT, try to make it a loop???
 
 SPOT.drop(index=SPOT.index[0],axis=0,inplace=True)
 FUT1.drop(index=FUT1.index[0],axis=0,inplace=True)
@@ -79,7 +81,6 @@ FUT1.drop(index=FUT1.index[0],axis=0,inplace=True)
 x = np.array(SPOT['Price_change']).reshape(-1, 1)
 y = np.array(FUT1['Price_change']).reshape(-1, 1)
 model = LinearRegression().fit(x,y)
-
 predict_y = model.predict(x)
 
 #构造返回对象
@@ -97,7 +98,7 @@ predictions['intercept'] = model.intercept_ #截距 predictions['coefficient'] =
 
 #### 统计量参数
 def get_model_stats(x, y, model):
-    message0 = f'Single Linear Regression: \ty = {model.intercept_[0]:.3f} + {model.coef_[0][0]:.3f}*x1'
+    message0 = f'Single Linear Regression: \ty = {model.intercept_[0]:.3f} + {model.coef_[0][0]:.3f}*x'
 
     from scipy import stats
 
@@ -119,3 +120,11 @@ def get_model_stats(x, y, model):
     return print(message0 +'\n' +message1 + '\n'+message2)
 
 get_model_stats(x, y, model)
+
+def pred(sample):
+    coef = model.coef_
+    intercept = model.intercept_
+    equation = coef * sample + intercept
+    return print(equation)
+
+pred(10) #example
