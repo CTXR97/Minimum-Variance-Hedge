@@ -48,12 +48,3 @@ We can use beta, the correlation coefficient, instead of the equation above if t
 Once we have found the optimal hedge ratio, we can find the number of futures contracts to purchase.
 
 <img width="476" alt="Screenshot 2022-07-11 at 12 06 22 AM" src="https://user-images.githubusercontent.com/107907500/178152611-3f037d2e-33db-4eb9-b8a6-44b501097e55.png">
-
-In Python Code (To-do):
-1. Find the variance of Spot
-2. Find the variance of Fut
-3. Find the Correlation
-4. Formulate the hedge ratio
-5. Based on the hedge ratio, define a function to allow user to input notional amount and price of futures to get hedge units
-
-
