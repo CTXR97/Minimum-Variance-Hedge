@@ -1,0 +1,56 @@
+import statistics
+import csv
+import pandas as pd
+import math
+
+print("Please input size of position being hedged")
+No_of_contracts = int(input())
+print("Please input size of one futures contract")
+Value_per_contract = int(input())
+
+#Read the different contracts
+CO1_SPOT = pd.read_excel('CO1.xlsx', skiprows=6)
+TTF_Contract_xxx_mth = pd.read_excel('TTF.xlsx', skiprows=7)
+
+#Calculate the percentage change
+CO1_SPOT['Price_change'] = CO1_SPOT['PX_LAST'].pct_change()
+TTF_Contract_xxx_mth['Price_change'] = TTF_Contract_xxx_mth['PX_LAST'].pct_change()
+
+#Calculate Stdev
+CO1_SPOT_std = CO1_SPOT['Price_change'].std()
+TTF_Contract_xxx_mth_std = TTF_Contract_xxx_mth['Price_change'].std()
+
+#Calculate Variance
+CO1_SPOT_var = CO1_SPOT['Price_change'].var()
+TTF_Contract_xxx_mth_var = TTF_Contract_xxx_mth['Price_change'].var()
+
+#Calculate Correlation
+Correlation_xxx_mth = CO1_SPOT['Price_change'].corr(TTF_Contract_xxx_mth['Price_change'])
+
+#Calculate Hedge Ratio
+Hedge_Ratio_xxx_mth = Correlation_xxx_mth * (CO1_SPOT_std/TTF_Contract_xxx_mth_std)
+
+#Calculate Risk_Reduction
+Risk_Reduction_xxx_mth = math.sqrt(1-Hedge_Ratio_xxx_mth**2)
+
+#Calculate Optimal contracts
+Hedge_Units_xxx_mth = Hedge_Ratio_xxx_mth * (No_of_contracts/Value_per_contract)
+
+#Calculate Basis Risk
+Basis_Risk_xxx_mth = CO1_SPOT_var + (Hedge_Ratio_xxx_mth*TTF_Contract_xxx_mth_var) - (2*Correlation_xxx_mth*CO1_SPOT_std*(Hedge_Ratio_xxx_mth*TTF_Contract_xxx_mth_std))
+
+#Summary table 
+List_of_tables = ['AUG22']
+Hedge_Ratio = [Hedge_Ratio_xxx_mth]
+Risk_Reduction = [Risk_Reduction_xxx_mth]
+Hedge_units = [Hedge_Units_xxx_mth]
+Basis_risk = [Basis_Risk_xxx_mth]
+
+Summary = pd.DataFrame()
+Summary['List_of_tables'] = List_of_tables
+Summary['Hedge_Ratio'] = Hedge_Ratio
+Summary['Risk_Reduction'] = Risk_Reduction 
+Summary['Hedge_units'] = Hedge_units
+Summary['Basis_risk'] = Basis_risk
+
+print(Summary)
