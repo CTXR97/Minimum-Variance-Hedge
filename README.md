@@ -2,9 +2,7 @@
 
 Hedging with Futures
 Although options are more commonly used for hedging than futures are, futures are still useful for hedging depending on the situation.
-
 Short hedge: A short hedge is appropriate when the hedger already owns an asset and expects to sell it at some time in the future.
-
 Long hedge: A long hedge is appropriate when a company knows it will have to purchase a certain asset in the future and wants to lock in a price now.
 
 Basis Risk — Futures
@@ -30,7 +28,6 @@ If the assets are not the same, the formula for basis can be easily modified,
 <img width="673" alt="Screenshot 2022-07-11 at 4 23 07 PM" src="https://user-images.githubusercontent.com/107907500/178220798-31bac059-f553-4b49-b7bb-a25a05685896.png">
 
 
-
 Given the presence of basis risk, the minimum-variance hedge is a means to hedge if the assets are different, as in a cross-hedge. When a trader enters a cross-hedge, they are using different assets to hedge.
 
 Let’s first construct a cash flow for a hedge.
@@ -48,3 +45,4 @@ We can use beta, the correlation coefficient, instead of the equation above if t
 Once we have found the optimal hedge ratio, we can find the number of futures contracts to purchase.
 
 <img width="476" alt="Screenshot 2022-07-11 at 12 06 22 AM" src="https://user-images.githubusercontent.com/107907500/178152611-3f037d2e-33db-4eb9-b8a6-44b501097e55.png">
+
