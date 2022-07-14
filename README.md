@@ -20,11 +20,25 @@ In this case to calculate the Basis risk, I am using the following formula:
 
 whereby S = Spot, h = Hedged ratio, F = Futures
 
-To calculate the hedged ratio:
+**To calculate the hedged ratio:**
 
 ![image](https://user-images.githubusercontent.com/107907500/178882722-df72e6bb-8b1e-443d-8e75-482ec4c7f7b4.png)
 
-To calculate the units hedged:
+**To calculate the units hedged:**
 
 <img width="476" alt="Screenshot 2022-07-11 at 12 06 22 AM" src="https://user-images.githubusercontent.com/107907500/178152611-3f037d2e-33db-4eb9-b8a6-44b501097e55.png">
+
+Regression was also performed on a futures contract against a spot contract: to plot a best fit line: 
+
+![image](https://user-images.githubusercontent.com/107907500/178883070-4a8085af-8fb9-4489-801c-eefae8a327fc.png)
+
+Sample of the **regression results**: 
+
+![image](https://user-images.githubusercontent.com/107907500/178883113-7f10e2e4-1064-44ab-a3df-174a94b23aca.png)
+
+**Final Output**:
+
+![image](https://user-images.githubusercontent.com/107907500/178883176-93d25e1c-060b-48ff-9852-2e18c7b2f6c8.png)
+
+
 
