@@ -40,5 +40,5 @@ Sample of the **regression results**:
 
 ![image](https://user-images.githubusercontent.com/107907500/178883176-93d25e1c-060b-48ff-9852-2e18c7b2f6c8.png)
 
-
+Note: In my backtest, I used TTF forward contracts and Brent as the spot rate. The results showed to be statistically insignificant and the "goodness of fit" i.e how does the model fits the data, based on the R^2 value is poor. This means that the model explains little to none of the variability of the response data around its mean. We can conclude that in this model, we cannot determine futures prices based on the spot price alone. 
 
