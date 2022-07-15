@@ -137,10 +137,34 @@ for FUT in (FUT1, FUT2, FUT3): # To add the additional file names here
         sigma = np.sqrt(Residual / (n- 2))
         t = model.coef_ * np.sqrt(L_xx) / sigma
         pt = stats.t.sf(t, n- 2)
-        message2 = f' t : {t[0][0]:.3f}; pt : {pt[0][0]}'
-        return print(message0 +'\n' +message1 + '\n'+message2)
+        message2 = f' t : {t[0][0]:.3f};\t pt : {pt[0][0]}'
+        
+        message3 =[]
+        
+        if float(pf[0]) <= 0.01:
+            message3.append("F-test Significant at 99% confidence level")
+        elif float(pf[0]) <= 0.05:
+            message3.append("F-test Significant at 95% confidence level")
+        elif float(pf[0]) <= 0.10:
+            message3.append("F-test Significant at 90% confidence level")
+        else:
+            message3.append("F-test not significant")
 
+        if float(pt[0][0]) <= 0.01:
+            message3.append("T-test Significant at 99% confidence level")
+        elif float(pt[0][0]) <= 0.05:
+            message3.append("T-test Significant at 95% confidence level")
+        elif float(pt[0][0]) <= 0.10:
+            message3.append("T-test Significant at 90% confidence level")
+        else:
+            message3.append("-test not significant")
+        
+        print(message3)
+        
+        return print(message0 +'\n' +message1 + '\n'+message2)      
+    
     get_model_stats(x, y, model)
+    
     
     def pred(sample):
         coef = model.coef_
@@ -151,4 +175,3 @@ for FUT in (FUT1, FUT2, FUT3): # To add the additional file names here
     print("input spot value")
     spot_value = int(input())
     pred(spot_value)
-    
