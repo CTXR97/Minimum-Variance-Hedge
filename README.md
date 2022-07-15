@@ -21,6 +21,12 @@ After selecting the same range of data, there were still inconsistencies in the 
 
 ![image](https://user-images.githubusercontent.com/107907500/179126783-86a6782a-97ce-410c-bcaf-d8bc782c68a8.png)
 
+**User input**
+
+The model also requires user to input the amount of exposure user is hedging against as well as the price of the futures contract
+
+![image](https://user-images.githubusercontent.com/107907500/179187006-7d6e8926-2802-4a92-95ea-560d1becedd7.png)
+
 **Basis Risk — Futures**
 
 The basis of a hedge is a measure of the difference between the spot price of the hedged asset and the futures price for the contact. Overtime, the basis will fluctuate and be zero at the future’s expiration date, assuming that the assets are the same.
