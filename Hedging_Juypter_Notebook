@@ -1,80 +1,154 @@
 import statistics
+import matplotlib.pyplot as plt
 import csv
 import pandas as pd
 import math
 from sklearn.linear_model import LinearRegression
 import numpy as np
+import os
 
-print("Please input size of position being hedged")
+print("Please input size of position hedging against")
 No_of_contracts = int(input())
 print("Please input size of one futures contract")
 Value_per_contract = int(input())
 
-#Read the different contracts
-
 SPOT = pd.read_excel('CO1.xlsx', skiprows=6)
+SPOT = SPOT.iloc[:98,:]   # To determine the number of rows used for analysis
+#SPOT
+
+date = SPOT['Date']
+SPOT_1 = SPOT.drop(['Date'], axis =1)
+SPOT_1.index = date
+SPOT = SPOT_1
+#SPOT
+
 FUT1 = pd.read_excel('TTF.xlsx', skiprows=7)
+FUT1 = FUT1.iloc[:92,:]   # To determine the number of rows used for analysis
 
-#Calculate the percentage change
+FUT2 = pd.read_excel('HENRY.xlsx', skiprows=6)
+FUT2 = FUT2.iloc[:93,:]   # To determine the number of rows used for analysis
 
-SPOT['Price_change'] = SPOT['PX_LAST'].pct_change()
-FUT1['Price_change'] = FUT1['PX_LAST'].pct_change()
+FUT3 = pd.read_excel('API2.xlsx', skiprows=7)
+FUT3 = FUT3.iloc[:93,:]   # To determine the number of rows used for analysis
 
-#Calculate Stdev
+for FUT in (FUT1, FUT2, FUT3): # To add the additional file names here
+    FUT = FUT
+    date = FUT['Date']
+    FUT_1 = FUT.drop(columns = ['Date'], axis = 1)
+    FUT_1.index = date
+    FUT = FUT_1
+    #print(FUT)
+    
+    Same_Date = []  # To ensure same date range for SPOT and FUT contracts 建立SPOT和FUT相同日期的列表
+    for date in SPOT.index:  
+        if date in FUT.index:   
+            Same_Date.append(date)
+       
+    for date in SPOT.index:
+        if date not in Same_Date:
+            SPOT.drop(index=[date],axis=0,inplace=True)
+    
+    for date in FUT.index:
+        if date not in Same_Date:
+            FUT.drop(index=[date],axis=0,inplace=True)
+    
+    SPOT['Price_change'] = SPOT['PX_LAST'].pct_change()
+    FUT['Price_change'] = FUT['PX_LAST'].pct_change()
 
-SPOT_std = SPOT['Price_change'].std()
-FUT1_std = FUT1['Price_change'].std()
+    def calculate():
+        SPOT_std = SPOT['Price_change'].std()
+        
+        FUT_std = FUT['Price_change'].std()
+    
+        SPOT_var = SPOT['Price_change'].var()
+        
+        FUT_var = FUT['Price_change'].var()
+    
+        Correlation_FUT = SPOT['Price_change'].corr(FUT['Price_change'])
 
-#Calculate Variance
+        Hedge_Ratio_FUT = Correlation_FUT * (SPOT_std / FUT_std)
 
-SPOT_var = SPOT['Price_change'].var()
-FUT1_var = FUT1['Price_change'].var()
+        Risk_Reduction_FUT = math.sqrt(1 - Hedge_Ratio_FUT ** 2)
 
-#Calculate Correlation
+        Hedge_Units_FUT = Hedge_Ratio_FUT * (No_of_contracts / Value_per_contract)
 
-Correlation_FUT1 = SPOT['Price_change'].corr(FUT1['Price_change'])
+        Basis_Risk_FUT = SPOT_var + (Hedge_Ratio_FUT * FUT_var) - (2 * Correlation_FUT * SPOT_std * (Hedge_Ratio_FUT * FUT_std))
+    
+        return (SPOT_std, FUT_std, SPOT_var, FUT_var, Correlation_FUT, Hedge_Ratio_FUT, Risk_Reduction_FUT, Hedge_Units_FUT, Basis_Risk_FUT)
 
-#Calculate Hedge Ratio
+    result = calculate()
+    Summary_dict ={} #Hash to return dictionary value (result)
+    Summary_dict['Correlations'] = result[4]
+    Summary_dict['Hedge_Ratio'] = result[5]
+    Summary_dict['Risk_Reduction'] = result[6]
+    Summary_dict['Hedge_units'] = result[7]
+    Summary_dict['Basis_risk'] = result[8]
 
-Hedge_Ratio_FUT1 = Correlation_FUT1 * (SPOT_std/FUT1_std)
+    Summary = pd.Series(Summary_dict)
+    print('\n')
+    print("Summary Table:")
+    print(Summary)
+    print('\n')
+    
+    # Regression
+    SPOT_1 = SPOT.drop(index=SPOT.index[0],axis=0,inplace=False)
+    FUT_1 = FUT.drop(index=FUT.index[0],axis=0,inplace=False)
 
-#Calculate Risk_Reduction
+    x = np.array(SPOT_1['Price_change']).reshape(-1, 1)
+    y = np.array(FUT_1['Price_change']).reshape(-1, 1)
 
-Risk_Reduction_FUT1 = math.sqrt(1-Hedge_Ratio_FUT1**2)
+    
+    model = LinearRegression().fit(x,y)
+    predict_y = model.predict(x)
+    
+    #Regression 构造返回对象
+    predictions = {}
+    predictions['intercept'] = model.intercept_ 
+    #截距 predictions['coefficient'] = model_1.coef_ #斜率(回归系数) predictions['predict_value'] = predict_y
+    
+    plt.scatter(x, y, color = 'blue')
+    
+    #绘图
+    #绘出已知数据散点图 plt.scatter(x1, y, color = 'blue')
+    #绘制预测直线
+    plt.plot(x, predict_y, color = 'red', linewidth = 3)
+    plt.title('predict FUT_1 by SPOT_1')
+    plt.xlabel('SPOT_1')
+    plt.ylabel('FUT_1')
+    plt.show()
+    
+    #### 统计量参数
+    def get_model_stats(x, y, model):
+        message0 = f'Single Linear Regression: \ty = {model.intercept_[0]:.3f} + {model.coef_[0][0]:.3f}*x'
 
-#Calculate Optimal contracts
+        from scipy import stats
 
-Hedge_Units_FUT1 = Hedge_Ratio_FUT1 * (No_of_contracts/Value_per_contract)
+        n = len(x)
+        y_prd = model.predict(x)
+        Regression = sum((y_prd - np.mean(y))**2) # Regression
+        Residual = sum((y - y_prd)**2) # Residual
+        R_square = Regression / (Regression + Residual) # R^2 a statistical measure of how well the regression predictions approximate the real data points
+        F = (Regression / 1) / (Residual / ( n - 2 )) # F-test indicates whether the model provides a better fit to the data than a model that contains no independent variables.
+        pf = stats.f.sf(F, 1, n- 2)
+        message1 =(f'R^2: {R_square[0]:.3f};\t' + f'SSR: {Regression[0]:.3f};\t SSE:{Residual[0]:.3f};\n' + f' F : {F[0]:.3f};\t pf : {pf[0]}')
 
-#Calculate Basis Risk
+        ## T-test determine the correlation between the dependent (response) and the independent (predictor) variables.
+        L_xx = n
+        sigma = np.sqrt(Residual / (n- 2))
+        t = model.coef_ * np.sqrt(L_xx) / sigma
+        pt = stats.t.sf(t, n- 2)
+        message2 = f' t : {t[0][0]:.3f}; pt : {pt[0][0]}'
+        return print(message0 +'\n' +message1 + '\n'+message2)
 
-Basis_Risk_FUT1 = SPOT_var + (Hedge_Ratio_FUT1*FUT1_var) - (2*Correlation_FUT1*SPOT_std*(Hedge_Ratio_FUT1*FUT1_std))
-
-#Summary table 
-
-Contracts = ['AUG22']
-Hedge_Ratio = [Hedge_Ratio_FUT1]
-Risk_Reduction = [Risk_Reduction_FUT1]
-Hedge_units = [Hedge_Units_FUT1]
-Basis_risk = [Basis_Risk_FUT1]
-
-Summary = pd.DataFrame()
-Summary['Contracts'] = Contracts
-Summary['Basis_risk'] = Basis_risk
-Summary['Hedge_Ratio'] = Hedge_Ratio
-Summary['Risk_Reduction'] = Risk_Reduction 
-Summary['Hedge_units'] = Hedge_units
-
-
-print(Summary)
-
-#Find regression of the different contracts against the SPOT
-
-SPOT['PX_LAST'].dropna()
-FUT1['PX_LAST'].dropna()
-
-x = np.array(SPOT['PX_LAST']).reshape(-1,1)
-y = np.array(FUT1['PX_LAST']).reshape(-1,1)
-model_1 = LinearRegression()
-model_1.fit(x, y)
-   
+    get_model_stats(x, y, model)
+    
+    def pred(sample):
+        coef = model.coef_
+        intercept = model.intercept_
+        equation = coef * sample + intercept
+        return print(equation)
+    
+    print("input spot value")
+    spot_value = int(input())
+    pred(spot_value)
+    
