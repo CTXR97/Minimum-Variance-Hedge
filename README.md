@@ -74,4 +74,4 @@ Alternative hypothesis: there is a relationship between the predictor variable a
 
 **Limitations of the model**
 
-1. I cannot find a method to label each table with the exact contract's name for example "AUG22 Contract". Manual labelling is also not possible. Will try to see if there are any work arounds for this. 
+1. I cannot find a method to label each table with the exact contract's name for example "AUG22 Contract", "SEP22 Contract". Manual labelling is also not possible because for this model, I am allowing it to run in loops to reduce the need for human intervention i.e to make amendments in the calculation engine.
