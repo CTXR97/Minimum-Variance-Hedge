@@ -58,6 +58,16 @@ The final table will be as such:
 **Regression test**
 A a single linear regression is performed as well to find the best fit line, to test for the significance of the data based on f-test and t-test. 
 
+**F-Test Hyptheses**:
+
+Null hypothesis: The fit of the intercept-only model and my model are equal.i.e no independent variable x
+Alternative hypothesis: The fit of the intercept-only model is significantly reduced compared to my model.
+
+**T-Test Hyptheses**:
+
+Null hypothesis: there is no relationship between the predictor variable and the response variable
+Alternative hypothesis: there is a relationship between the predictor variable and the response variable
+
 ![image](https://user-images.githubusercontent.com/107907500/179129711-b31d074e-5357-418c-9ed4-af4a91b01a31.png)
 
 **Limitations of the model**
