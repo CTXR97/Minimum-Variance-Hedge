@@ -1,8 +1,10 @@
 # Minimum-Variance-Hedge
 
-**Hedging with Futures**
+The minimum variance hedge ratio, also known as the optimal hedge ratio, is a formula to evaluate the correlation between the variance in the value of an asset or liability and that of the hedging instrument that is meant to protect it (hedge their exposure with futures contracts).
 
-Although options are more commonly used for hedging than futures are, futures are still useful for hedging depending on the situation.
+The hedge ratio is to find out the optimal number of contracts in order to offset their exposure to the potential changes in the value of their underlying asset or liability.
+
+**Hedging with Futures**
 
 **Short hedge**: A short hedge is appropriate when the hedger already owns an asset and expects to sell it at some time in the future.
 
