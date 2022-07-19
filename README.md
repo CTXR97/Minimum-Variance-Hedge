@@ -4,22 +4,20 @@ The minimum variance hedge ratio, also known as the optimal hedge ratio, is a fo
 
 The hedge ratio is to find out the optimal number of contracts in order to offset their exposure to the potential changes in the value of their underlying asset or liability.
 
-**Hedging with Futures**
-
-**Short hedge**: A short hedge is appropriate when the hedger already owns an asset and expects to sell it at some time in the future.
-
-**Long hedge:** A long hedge is appropriate when a company knows it will have to purchase a certain asset in the future and wants to lock in a price now.
 
 **Data Cleansing:** 
 
-In order to ensure consistency in the datasets, this part of the code requires user to determine the range of data to be used for analysis based on the row number.
->>> for example: SPOT = SPOT.iloc[:98,:] <<< iloc[row, column] allows user to determine the rows and columns based on integer index/position so in this case, it is selection from the start till row 98 and all columns. 
+Assuming the data is in a form of a matrix with the horizontal axis referring to the different futures contracts while vertical axis refers to the dates, we need to select the specific contract i.e the specific column and to do that, I used an indexing method.
+>>> In this case, cols [0, 36] means I am selecting columns 0 (which is the date col) and col 36 (which is the 31 Dec 22 contract). 
 
-![image](https://user-images.githubusercontent.com/107907500/179127079-010c2f8a-3715-4fd3-8768-bee3774a2d28.png)
+After selecting the specific column and applying the data transformation to the date fields, to re arrange them in descending order, we need to specify the rows used for the analysis as well. Reason for doing so is to ensure consistency. If the number of rows in the dataset are the same, then there isn't a need to specify the rows already. However, there are situations whereby the data is inconsistent, so recommended to keep it. 
+>>> iloc[:678, :] means I am selecting all rows till row 678 and all columns. 
 
-After selecting the same range of data, there were still inconsistencies in the data for example, TTF is traded on 15 July 2022 but CO1 is not so 15 July 2022 will not appear in CO1 dataset. The issue with this is that it will lead to very inaccurate results e.g correlation of 0.003 when it was expected to be 0.3. So this part of the code does the cleansing to ensure only data from the same dates are selected. 
+![image](https://user-images.githubusercontent.com/107907500/179689326-6aabbc33-dc1e-4302-9f7c-0dba72eb5df7.png)
 
-![image](https://user-images.githubusercontent.com/107907500/179126783-86a6782a-97ce-410c-bcaf-d8bc782c68a8.png)
+Another redundancy to ensure the datasets are consistent, a date filter is also applied - this helps to ensure that the dates used for analysis are the same. Because based on backtests, there were scenarios whereby the dates were inconsistent due to different trading dates. 
+
+![image](https://user-images.githubusercontent.com/107907500/179690488-e8746937-c574-4c30-81fe-a443d351c057.png)
 
 **User input**
 
