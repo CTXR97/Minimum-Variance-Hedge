@@ -50,7 +50,7 @@ whereby S = Spot, h = Hedged ratio, F = Futures
 **Risk reduction**
 To calculate the risk reduction based on optimal hedge ratio, I used the following formula:
 
-![image](https://user-images.githubusercontent.com/107907500/179691370-0475d516-762d-4772-8cab-8980484924f2.png)
+![image](https://user-images.githubusercontent.com/107907500/179709369-274fd8f5-958c-4c99-997a-2f51088979bb.png)
 
 >>>Require to confirm if formula is correct
 
