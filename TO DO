@@ -1,0 +1,5 @@
+1. Change the input file format, instead of using an indexing format, to allow user to specify the name of the contract
+>>> To do so, need to reformat from float to string for all the dates in horizontal and vertical axis.
+2. Draw a graph using 1 TTF contract as the base i.e the X-Axis then allow to select a specific range of spreads as the Y-axis 
+>>> This means at every point of the TTF contract, show the spread as a relationship to TTF. 
+3. After the graph, allow user to select the specifc Spread contract to compare against the TTF contract and calculate the correlations etc
