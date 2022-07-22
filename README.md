@@ -4,9 +4,11 @@ The minimum variance hedge ratio, also known as the optimal hedge ratio, is a fo
 
 The hedge ratio is to find out the optimal number of contracts in order to offset their exposure to the potential changes in the value of their underlying asset or liability.
 
-Paper used for reference: The Hedging Effectiveness of Brent Crude Oil Futures Contracts
+Paper used for reference: 
 
-https://oda.oslomet.no/oda-xmlui/bitstream/handle/10642/7738/Smeby_MarianneNordskogen-Thorbjoernsen_KrisinaBruu.pdf?sequence=2&isAllowed=y
+**The Hedging Effectiveness of Brent Crude Oil Futures Contracts **: https://oda.oslomet.no/oda-xmlui/bitstream/handle/10642/7738/Smeby_MarianneNordskogen-Thorbjoernsen_KrisinaBruu.pdf?sequence=2&isAllowed=y
+
+**Futures hedge ratios**: a review: http://ntur.lib.ntu.edu.tw/bitstream/246246/83715/1/14.pdf
 
 **Data Cleansing:** 
 
