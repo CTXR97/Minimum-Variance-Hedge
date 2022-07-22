@@ -52,7 +52,7 @@ whereby S = Spot, h = Hedged ratio, F = Futures
 
 <img width="476" alt="Screenshot 2022-07-11 at 12 06 22 AM" src="https://user-images.githubusercontent.com/107907500/178152611-3f037d2e-33db-4eb9-b8a6-44b501097e55.png">
 
-**Hedge effectivenessn**
+**Hedge effectiveness**
 
 Hedging effectiveness (HE) is the proportion of the variance that is reduced by hedging and it presents how well the hedged position performs relative to the unhedged position. If HE is equal to one, the variance is reduced by 100% compared to the unhedged position. In other words, the price risk is completely eliminated. If HE is equal to zero, the hedged position does not reduce the price risk.
 
