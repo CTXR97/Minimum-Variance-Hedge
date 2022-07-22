@@ -61,7 +61,7 @@ Hedging effectiveness (HE) is the proportion of the variance that is reduced by 
 **Final Results**
 The final table will be as such: 
 
-![image](https://user-images.githubusercontent.com/107907500/179129540-7227f5b8-f4ba-4637-9a67-6af6274d3c35.png)
+![image](https://user-images.githubusercontent.com/107907500/180368331-9f368c82-7e30-4dff-a779-31a7fe194a8f.png)
 
 **Regression test**
 A a single linear regression is performed as well to find the best fit line, to test for the significance of the data based on f-test and t-test. 
