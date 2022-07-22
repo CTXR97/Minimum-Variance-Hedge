@@ -4,6 +4,8 @@ The minimum variance hedge ratio, also known as the optimal hedge ratio, is a fo
 
 The hedge ratio is to find out the optimal number of contracts in order to offset their exposure to the potential changes in the value of their underlying asset or liability.
 
+Paper used for reference: The Hedging Effectiveness of Brent Crude Oil Futures Contracts
+https://oda.oslomet.no/oda-xmlui/bitstream/handle/10642/7738/Smeby_MarianneNordskogen-Thorbjoernsen_KrisinaBruu.pdf?sequence=2&isAllowed=y
 
 **Data Cleansing:** 
 
@@ -47,12 +49,12 @@ whereby S = Spot, h = Hedged ratio, F = Futures
 
 <img width="476" alt="Screenshot 2022-07-11 at 12 06 22 AM" src="https://user-images.githubusercontent.com/107907500/178152611-3f037d2e-33db-4eb9-b8a6-44b501097e55.png">
 
-**Risk reduction**
-To calculate the risk reduction based on optimal hedge ratio, I used the following formula:
+**Hedge effectivenessn**
 
-![image](https://user-images.githubusercontent.com/107907500/179709369-274fd8f5-958c-4c99-997a-2f51088979bb.png)
+Hedging effectiveness (HE) is the proportion of the variance that is reduced by hedging and it presents how well the hedged position performs relative to the unhedged position. If HE is equal to one, the variance is reduced by 100% compared to the unhedged position. In other words, the price risk is completely eliminated. If HE is equal to zero, the hedged position does not reduce the price risk.
 
->>>Require to confirm if formula is correct
+![image](https://user-images.githubusercontent.com/107907500/180367772-ab33b652-db78-4053-9585-6ccdf11d8ef6.png)
+![image](https://user-images.githubusercontent.com/107907500/180367789-8f862156-4754-43dc-9e56-908bdf2d8350.png)
 
 **Final Results**
 The final table will be as such: 
