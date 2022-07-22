@@ -8,7 +8,7 @@ Paper used for reference:
 
 **The Hedging Effectiveness of Brent Crude Oil Futures Contracts**: https://oda.oslomet.no/oda-xmlui/bitstream/handle/10642/7738/Smeby_MarianneNordskogen-Thorbjoernsen_KrisinaBruu.pdf?sequence=2&isAllowed=y
 
-**Futures hedge ratios**: a review: http://ntur.lib.ntu.edu.tw/bitstream/246246/83715/1/14.pdf
+**Futures hedge ratios**: http://ntur.lib.ntu.edu.tw/bitstream/246246/83715/1/14.pdf
 
 **Data Cleansing:** 
 
